@@ -23,7 +23,7 @@ const MyPage = () => {
                     <h1 className="mb-4">הרשימה שלי</h1>
                     <div className="btn-group flex flex-wrap" role="group">
                         {resumes.map((r, index) => (
-                            <div className="card" style={{ width: "18rem", heigth: "50px" }} key={index} onClick={() => handleClick(index)} key={index}>
+                            <div className="card" style={{ width: "18rem", heigth: "50px" }} key={index} onClick={() => handleClick(index)} >
                                 <img className="card-img-top" src={resumes[index].imageUrl} alt="Card image cap" style={{ heigth: "30px" }} />
                                 <div className="card-body">
                                     <p className="card-text">
@@ -35,9 +35,8 @@ const MyPage = () => {
                     </div>
                     <button
                         type="button"
-                        className="btn btn-purple"
-                        onClick={handleAdd}
                         className="btn btn-secondary btn-lg btn-block w-100"
+                        onClick={handleAdd}
                     >
                         יצירת קוח
                     </button>
@@ -47,6 +46,5 @@ const MyPage = () => {
     );
 
 }
-/// <button type="button" className="btn btn-purple" onClick={() => handleClick(index)} key={index}>resume {resumes[index].fullName}</button>
 
 export default MyPage;

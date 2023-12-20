@@ -3,6 +3,8 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { ResumesContext } from '../context/resumes';
 import { useNavigate, useParams } from 'react-router-dom';
+import html2pdf from 'html2pdf.js'
+
 
 export default function DownloadResume() {
     const { resumes } = useContext(ResumesContext);
@@ -22,35 +24,33 @@ export default function DownloadResume() {
     }
 
 
-    const downloadPDF = () => {
-        const input = pdfRef.current;
-        html2canvas(input).then((canvas) => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'a4', true);
+    const handleDownload = () => {
+        const resumeElement = pdfRef.current;
 
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
+        if (resumeElement) {
+            const pdfOptions = {
+                margin: 2,
+                filename: 'resumeFile.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            };
 
-            const imgWidth = canvas.width;
-            const imgHeight = canvas.height;
+            html2pdf().from(resumeElement).set(pdfOptions).save();
+        }
 
-            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-            const imgX = (pdfWidth - imgWidth * ratio) / 2;
-            const imgY = 10;
-
-            pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-            pdf.save(`resume.pdf`);
-        });
-    }
+    };
 
 
-    
+
+
 
     return (
         <>
             <div className='col-6 border w-100 text-center'>
                 <h1>MY RESUME</h1>
                 <div id="styled-content" style={{ height: "90vh" }} ref={pdfRef}>
+                    <h1 className="display-4"><b>{currentResume.fullName}</b></h1>
                     <div className="container mt-4 h-100">
                         <div className='row h-100'>
                             <div className="col-4">
@@ -58,11 +58,10 @@ export default function DownloadResume() {
                                     <div className="jumbotron h-100">
                                         <div className='row justify-content-center'>
                                             <img className="rounded-circle overflow-hidden" src={currentResume.imageUrl} alt="" />
-                                            <img src={URL.createObjectURL(currentResume.imageUrl)} width="120px" height="120px" alt="profile pic" />
+                                            {/* {currentResume.imageUrl ? <img src={URL.createObjectURL(currentResume.imageUrl)} width="120px" height="120px" alt="profile pic" /> : currentResume.imageUrl && <img src={currentResume.imageUrl} width="120px" height="120px" alt="profile pic" />} */}
                                             {/* <div  style={{ backgroundSize: 'cover', backgroundPosition: 'center', width: '150px', height: '150px', backgroundImage: `url(${currentResume.imageUrl})` }}> */}
                                             {/* </div> */}
                                         </div>
-                                        <h1 className="display-4">{currentResume.fullName}</h1>
 
                                         <hr />
                                     </div>
@@ -111,7 +110,7 @@ export default function DownloadResume() {
                         </div>
                     </div>
                 </div>
-                <button className="btn btn-secondary btn-lg btn-block text-info" onClick={downloadPDF}>download PDF</button>
+                <button className="btn btn-secondary btn-lg btn-block text-info" onClick={handleDownload}>download PDF</button>
             </div >
             <button className="btn btn-secondary btn-lg btn-block text-info" onClick={handleNavigate}>My Resumes</button>
         </>
