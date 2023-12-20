@@ -6,8 +6,6 @@ import Provider from './context/resumes.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Provider>
       <App />
-    </Provider>
   </React.StrictMode>,
 )

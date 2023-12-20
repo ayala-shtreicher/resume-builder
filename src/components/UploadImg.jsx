@@ -1,9 +1,7 @@
-import { useState ,useEffect} from 'react';
+import { useState } from 'react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebaseconfig';
 import { v4 } from 'uuid';
-import LoadingIcons from 'react-loading-icons'
-import Puff from 'react-loading-icons/dist/esm/components/puff';
 
 
 const UpImage = ({ handleImage }) => {
@@ -19,14 +17,13 @@ const UpImage = ({ handleImage }) => {
       const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
       await uploadBytes(imageRef, imageUpload);
 
-      let imageUrl=null;
-      await getDownloadURL(imageRef).then((data)=>{
+      let imageUrl = null;
+      await getDownloadURL(imageRef).then((data) => {
         setStatus(false)
-         imageUrl = data;
+        imageUrl = data;
       });
 
       handleImage(imageUrl);
-      //alert(`Image uploaded successfully! URL: ${imageUrl}`);
     } catch (error) {
       console.error('Error uploading image:', error);
     }
@@ -40,10 +37,11 @@ const UpImage = ({ handleImage }) => {
   return (
     <div>
       <input type="file" onChange={handleImageChange} placeholder="upload" />
-      <LoadingIcons.Bars />
-      <h2>tgyhu</h2>
-      <Puff />
-      <button onClick={uploadImage}>Upload Image</button>
+      {status &&
+        <div class="spinner-border text-info fs-1" role="status">
+        </div>
+      }
+      <button className="btn btn-secondary btn-lg btn-block text-info" onClick={uploadImage}>Upload Image</button>
     </div>
   );
 };

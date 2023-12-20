@@ -112,7 +112,6 @@ const Provider = ({ children }) => {
     onAuthStateChanged(auth, (user) => {
         if (user) {
             setUserLogin(user)
-           
         }
         else {
             console.log("user is not connected");
